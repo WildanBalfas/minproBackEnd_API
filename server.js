@@ -25,7 +25,7 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 
 server.get('/', (req, res, next) => {
-    var html = '<html><head><title>Some Title</title></head><body><h1>MiniProjectAPI</h1></body></html>';
+    var html = '<html><head><title>Some Title</title></head><body><h1>MiniProjectBack_EndAPI</h1></body></html>';
 
     res.writeHead(200, {
         'Content-Length': Buffer.byteLength(html),
