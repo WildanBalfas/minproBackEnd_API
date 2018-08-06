@@ -25,7 +25,7 @@ server.pre(cors.preflight);
 server.use(cors.actual);
 
 server.get('/', (req, res, next) => {
-    var html = '<html><head><title>Some Title</title></head><body><h1>LiveCode</h1></body></html>';
+    var html = '<html><head><title>Some Title</title></head><body><h1>MiniProjectAPI</h1></body></html>';
 
     res.writeHead(200, {
         'Content-Length': Buffer.byteLength(html),
@@ -39,5 +39,5 @@ server.get('/', (req, res, next) => {
 global.config = require('./configurations/config');
 
 server.listen(config.port, function () {
-  console.log('%s listen at %s', server.name, server.url);
+  console.log('%s listen di %s', server.name, server.url);
 });
