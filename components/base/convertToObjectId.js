@@ -14,11 +14,29 @@ module.exports = function (entity) {
         'm_employee_id'
     ];
 
-    for (let key in entity) {
-        let check = objEntity.includes(key);
-        if (check) {
-            let value = entity[key];
-            entity[key] = ObjectId(value);
+    /**
+     * Cek, apakah Array Lebih Dari Satu Atau Tidak.
+     * Object Array atau Tidak
+     */
+    if(entity.length > 0){
+        for(let i=0; i< entity.length; i++){
+            let dataEntity = entity[i];
+            for (let key in dataEntity) {
+                let check = objEntity.includes(key);
+                if (check) {
+                    let value = dataEntity[key];
+                    dataEntity[key] = ObjectId(value);
+                }
+            }
+        }
+        
+    }else{
+        for (let key in entity) {
+            let check = objEntity.includes(key);
+            if (check) {
+                let value = entity[key];
+                entity[key] = ObjectId(value);
+            }
         }
     }
 }
