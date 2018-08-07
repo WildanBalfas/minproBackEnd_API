@@ -36,12 +36,12 @@ server.get('/', (req, res, next) => {
     res.end;
 });
 
-//route
-require('./components/controllers/template.controller')(server, 'm_menu');
-require('./components/controllers/template.controller')(server, 'm_unit');
-require('./components/controllers/template.controller')(server, 'm_menu_access');
-require('./components/controllers/template.controller')(server, 'm_company');
-require('./components/controllers/template.controller')(server, 'm_souvenir');
+/**
+ * Route in route components
+ */
+
+ require('./components/route/route')(server);
+
 
 global.config = require('./components/configurations/config');
 
