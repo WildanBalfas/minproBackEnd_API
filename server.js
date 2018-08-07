@@ -36,7 +36,10 @@ server.get('/', (req, res, next) => {
     res.end;
 });
 
-global.config = require('./configurations/config');
+//route
+require('./components/controllers/template.controller')(server, 'm_menu');
+
+global.config = require('./components/configurations/config');
 
 server.listen(config.port, function () {
   console.log('%s listen di %s', server.name, server.url);
