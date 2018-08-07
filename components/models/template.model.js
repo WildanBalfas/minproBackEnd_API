@@ -12,9 +12,9 @@ function Models() {
             dbo = db.db(config.myDB);
 
             if (req.method === 'PUT' || req.method === 'POST') {
+                let entity = req.body;
                 ConvertToObjectId(entity);
                 TimeStamp(entity, req);
-                let entity = req.body;
             }
 
             if (req.method === 'POST') {
