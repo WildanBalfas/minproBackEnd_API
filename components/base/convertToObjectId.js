@@ -11,7 +11,7 @@ module.exports = function (entity) {
         'parent_id',
         'm_role_id',
         'm_menu_id',
-        'm_employee_id'
+        'm_employee_id',
     ];
 
     /**
