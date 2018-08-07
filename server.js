@@ -38,6 +38,8 @@ server.get('/', (req, res, next) => {
 
 //route
 require('./components/controllers/template.controller')(server, 'm_menu');
+require('./components/controllers/template.controller')(server, 'm_unit');
+require('./components/controllers/template.controller')(server, 'm_menu_access');
 
 global.config = require('./components/configurations/config');
 
