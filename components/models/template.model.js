@@ -18,6 +18,7 @@ function Models() {
             }
 
             if (req.method === 'POST') {
+                let entity = req.body;
                 await dbo.collection(name).insert(entity, function (err, response) {
                     if (err) throw err;
                     res.send(201, response);
@@ -36,13 +37,15 @@ function Models() {
                     });
                 }
             } else if (req.method === 'PUT') {
+                let objID = ObjectID(req.params.id);
+                let entity = req.body;
                 await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity }, function (err, response) {
                     if (err) throw err;
                     res.send(200, entity);
                 });
             } else if (req.method === 'DELETE') {
                 let objID = ObjectID(req.params.id);
-                await dbo.collection(name).findOne({ '_id': objID }, function (err, response) {
+                await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {
                     if (err) throw err;
                     res.send(200, response);
                 });
