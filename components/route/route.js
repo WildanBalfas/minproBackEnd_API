@@ -12,6 +12,6 @@ module.exports = exports = function (server) {
     require('../controllers/template.controller')(server, 'm_employee');
     require('../controllers/template.controller')(server, 't_souvenir');
     require('../controllers/m_souvenir_unit')(server);
-    require('../controllers/m_products')(server);
+    // require('../controllers/m_products')(server);
     require('../controllers/m_menuaccess.controller')(server);
 }
