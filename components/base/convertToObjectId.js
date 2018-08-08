@@ -12,6 +12,7 @@ module.exports = function (entity) {
         'm_role_id',
         'm_menu_id',
         'm_employee_id',
+        'm_unit_id'
     ];
 
     /**

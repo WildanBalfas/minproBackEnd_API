@@ -43,6 +43,7 @@ server.get('/', (req, res, next) => {
  require('./components/route/route')(server);
 
 
+
 global.config = require('./components/configurations/config');
 
 server.listen(config.port, function () {
