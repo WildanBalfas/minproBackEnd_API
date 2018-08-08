@@ -1,8 +1,7 @@
 'use strict';
 const MongoClient = require('mongodb').MongoClient;
 let ObjectID = require('mongodb').ObjectID;
-const TimeStamp = require('../base/timestamp');
-let ConvertToObjectId = require('../base/convertToObjectId');
+let Base = require('../base/base.function');
 let dbo;
 
 function Models() {
@@ -13,12 +12,13 @@ function Models() {
 
             if (req.method === 'PUT' || req.method === 'POST') {
                 let entity = req.body;
-                ConvertToObjectId(entity);
-                TimeStamp(entity, req);
+                Base.convertToObjectId(entity);
+                Base.setTimeStamp(entity, req);
             }
 
             if (req.method === 'POST') {
                 let entity = req.body;
+                Base.isDelete(entity, req);
                 await dbo.collection(name).insert(entity, function (err, response) {
                     if (err) throw err;
                     res.send(201, response);
@@ -44,11 +44,19 @@ function Models() {
                     res.send(200, entity);
                 });
             } else if (req.method === 'DELETE') {
-                let objID = ObjectID(req.params.id);
-                await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {
-                    if (err) throw err;
-                    res.send(200, response);
-                });
+                // let objID = ObjectID(req.params.id);
+                // await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {
+                //     if (err) throw err;
+                //     res.send(200, response);
+                // });
+                if (req.params.id) { // Get By Id
+                    let objID = ObjectID(req.params.id);
+                    await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: {"is_delete" : "0"} }, function (err, response) {
+                        if (err) throw err;
+                        res.send(200, response);
+                    });
+                }
+
             }
             db.close();
         });

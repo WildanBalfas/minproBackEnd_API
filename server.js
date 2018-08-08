@@ -24,18 +24,6 @@ const cors = corsMiddleWare({
 server.pre(cors.preflight);
 server.use(cors.actual);
 
-server.get('/', (req, res, next) => {
-    var html = '<html><head><title>Some Title</title></head><body><h1>MiniProjectBack_EndAPI</h1></body></html>';
-
-    res.writeHead(200, {
-        'Content-Length': Buffer.byteLength(html),
-        'Content-Type': 'text/html'
-    })
-
-    res.write(html);
-    res.end;
-});
-
 /**
  * Route in route components
  */
