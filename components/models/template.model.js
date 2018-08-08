@@ -44,19 +44,11 @@ function Models() {
                     res.send(200, entity);
                 });
             } else if (req.method === 'DELETE') {
-                // let objID = ObjectID(req.params.id);
-                // await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {
-                //     if (err) throw err;
-                //     res.send(200, response);
-                // });
-                if (req.params.id) { // Get By Id
-                    let objID = ObjectID(req.params.id);
-                    await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: {"is_delete" : "0"} }, function (err, response) {
-                        if (err) throw err;
-                        res.send(200, response);
-                    });
-                }
-
+                let objID = ObjectID(req.params.id);
+                await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {
+                    if (err) throw err;
+                    res.send(200, response);
+                });
             }
             db.close();
         });

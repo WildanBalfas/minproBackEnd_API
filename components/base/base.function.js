@@ -68,8 +68,6 @@ function BaseFunction() {
     this.isDelete = function (entity, req) {
         if (req.method === 'POST') {
             entity.is_delete = 0;
-        } else if (req.method === 'DELETE') { // Belum Digunakan
-            console.log(entity);
         }
     }
 
