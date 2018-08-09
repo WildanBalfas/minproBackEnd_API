@@ -39,6 +39,9 @@ function Models() {
             } else if (req.method === 'PUT') {
                 let objID = ObjectID(req.params.id);
                 let entity = req.body;
+                if(entity.is_delete){
+                    entity.is_delete = 1;
+                }
                 await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity }, function (err, response) {
                     if (err) throw err;
                     res.send(200, entity);
@@ -52,6 +55,32 @@ function Models() {
             }
             db.close();
         });
+    }
+
+    this.lastIndex = function(callback) {
+        let name='m_product';
+        MongoClient.connect(config.dbconn, async function (err, db) {
+            if (err) throw err;
+            dbo = db.db(config.dbname);
+            dbo.collection(name).aggregate(
+                [
+                  { $sort: { _id: 1, code: 1 } },
+                  {
+                    $group:
+                      {
+                        _id: "$id",
+                        code: { $last: "$code" }
+                      }
+                  }
+                ]
+             ).toArray(function (err, response) {
+                if (err) throw err;
+                return  callback(response);
+                db.close();
+            });
+        });
+
+        
     }
 }
 

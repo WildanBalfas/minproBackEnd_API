@@ -38,17 +38,30 @@ function BaseFunction() {
         }
     }
 
-
     /**
-     * Generate Code For a Code
+     * 
      */
     this.autoGenerateCode = function () {
+        let dataModel = require('../models/template.model');
+        dataModel.lastIndex(function (callback) {
+            let code = callback[0].code; // Dapatkan code
+            let slice = code.slice(2); // Potong Huruf Yang Di Depan
+            let strLength = code.length; // Panjang String
+            let jumlah = parseInt(slice) + 1; // Melakukan penjumlahan
+            let jumlahLength = (jumlah.toString()).length;
+            let codeDepan = code.slice(0, 2)
+            let codeTengah = code.slice(2, strLength - (parseInt(jumlahLength)));
+            console.log(codeDepan + codeTengah + jumlah)
+        })
+
 
     }
 
 
     /**
-     * set timestamp
+     * set timeStamp for all collection
+     * @param {*} entity 
+     * @param {*} req 
      */
     this.setTimeStamp = function (entity, req) {
         var now = new Date()
@@ -61,16 +74,27 @@ function BaseFunction() {
         }
     }
 
-    /**
-     * set is_delete for all collection after Post or Delete
-     */
 
+    /**
+     * set is_delete for all collection after Post
+     * 
+     * @param {*} entity 
+     * @param {*} req 
+     */
     this.isDelete = function (entity, req) {
         if (req.method === 'POST') {
             entity.is_delete = 0;
         }
     }
 
+
+    /**
+     * Dapatkan nama collection dan ubah '_' menjadi '-'
+     * @param {*} name 
+     */
+    this.regexURL = function (name) {
+        return name.replace(/_/g, "-")
+    }
 }
 
 module.exports = new BaseFunction();
