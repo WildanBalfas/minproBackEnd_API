@@ -21,8 +21,9 @@ module.exports=exports= function(server){
                     "code": "$code", 
                     "name": "$name", 
                     "description" : "$description",
-                    "unit": "$m_unitDoc.name",
-                    "createDate" : "$createDate"    				
+                    "unitName": "$m_unitDoc.name",
+                    "createDate" : "$createDate",
+                    "is_delete" : "$is_delete"				
             }
             }
         ])

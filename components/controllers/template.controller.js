@@ -9,8 +9,8 @@ module.exports = exports = function (server, name) {
     });
 
     server.get(route, (req, res, next) => {
-        Base.autoGenerateCode();
-        // dataModel.model(req, res, next, name);
+        // Base.autoGenerateCode();
+        dataModel.model(req, res, next, name);
     });
 
     server.get(route + '/:id', (req, res, next) => {
