@@ -18,4 +18,10 @@ module.exports = exports = function (server) {
     // require('../controllers/m_products')(server);
     require('../controllers/m_menuaccess.controller')(server);
     require('../controllers/t_event.controller')(server);
+
+    require('../controllers/template.controller')(server, 't_design');
+    
+    require('../controllers/template.controller')(server, 't_design_item');
+    
+    require('../controllers/template.controller')(server, 't_design_item_file');
 }
