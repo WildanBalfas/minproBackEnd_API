@@ -41,17 +41,20 @@ function BaseFunction() {
     /**
      * 
      */
-    this.autoGenerateCode = function () {
+    this.autoGenerateCode = function (name) {
         let dataModel = require('../models/template.model');
         dataModel.lastIndex(function (callback) {
-            let code = callback[0].code; // Dapatkan code
-            let slice = code.slice(2); // Potong Huruf Yang Di Depan
-            let strLength = code.length; // Panjang String
-            let jumlah = parseInt(slice) + 1; // Melakukan penjumlahan
-            let jumlahLength = (jumlah.toString()).length;
-            let codeDepan = code.slice(0, 2)
-            let codeTengah = code.slice(2, strLength - (parseInt(jumlahLength)));
-            console.log(codeDepan + codeTengah + jumlah)
+            if (callback) {
+                let code = callback[0].code; // Dapatkan code
+                let slice = code.slice(2); // Potong Huruf Yang Di Depan
+                let strLength = code.length; // Panjang Code
+                let jumlah = parseInt(slice) + 1; // Melakukan penjumlahan
+                let jumlahLength = (jumlah.toString()).length; // Panjang Hasil Penjumlahan
+                let codeDepan = code.slice(0, 2) // Dapatkan Kode Depan
+                let codeTengah = code.slice(2, strLength - (parseInt(jumlahLength))); // Penggabungan
+                console.log(codeDepan + codeTengah + jumlah)
+            }else{
+            }
         })
 
 

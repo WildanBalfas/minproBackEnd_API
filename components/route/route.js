@@ -8,7 +8,7 @@ module.exports = exports = function (server) {
     require('../controllers/template.controller')(server, 'm_company');
     // require('../controllers/template.controller')(server, 'm_souvenir');
     require('../controllers/template.controller')(server, 'm_product');
-    require('../controllers/template.controller')(server, 'm_user');
+    require('../controllers/m_user.controller')(server);
     require('../controllers/template.controller')(server, 'm_employee');
     require('../controllers/template.controller')(server, 't_souvenir');
     require('../controllers/m_souvenir_unit')(server);
