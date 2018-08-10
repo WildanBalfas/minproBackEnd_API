@@ -13,7 +13,10 @@ function BaseFunction() {
             'm_role_id',
             'm_menu_id',
             'm_employee_id',
-            'm_unit_id'
+            'm_unit_id',
+            "request_by",
+            "approved_by",
+            "assign_to"
         ];
         if (entity.length > 0) {
             for (let i = 0; i < entity.length; i++) {
