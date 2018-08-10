@@ -14,10 +14,19 @@ function BaseFunction() {
             'm_menu_id',
             'm_employee_id',
             'm_unit_id',
-            'recieved_by',
+            'received_by',
             "request_by",
             "approved_by",
-            "assign_to"
+            "assign_to",
+            "t_event_id",
+            "t_design_id",
+            "m_product_id",
+            "t_design_item_id",
+            "t_promotion_id",
+            "settlement_by",
+            "settlement_approved_by",
+            "t_souvenir_id",
+            "m_souvenir_id"
         ];
         if (entity.length > 0) {
             for (let i = 0; i < entity.length; i++) {

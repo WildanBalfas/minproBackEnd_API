@@ -18,6 +18,7 @@ module.exports=exports= function(server){
             { $lookup: { from: "m_employee", localField: "assign_to", foreignField: "_id", as: "employeeDoc" } },
             { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
             { $lookup: { from: "m_role", localField: "userDoc.m_role_id", foreignField: "_id", as: "roleDoc" } },
+            
             { $unwind: "$employeeDoc" },
             { $unwind: "$userDoc" },
             { $unwind: "$roleDoc" },
