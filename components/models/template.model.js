@@ -17,12 +17,29 @@ function Models() {
             }
 
             if (req.method === 'POST') {
+                let arrayName = ['t_design_item', 't_design_item_file', 't_promotion_item',
+                    't_promotion_item_file', 't_souvenir_item', 'm_user', 'm_employee', 'm_menu_access']
+
                 let entity = req.body;
                 Base.isDelete(entity, req);
-                await dbo.collection(name).insert(entity, function (err, response) {
-                    if (err) throw err;
-                    res.send(201, response);
-                });
+                if (arrayName.includes(name)) { // Table yang tidak memiliki code
+                    await dbo.collection(name).insert(entity, function (err, response) {
+                        if (err) throw err;
+                        res.send(201, response);
+                    });
+                } else { // table yang memiliki code
+                    lastIndexOfCollection(name, function (response) {
+                        MongoClient.connect(config.dbconn, async function (err, db) {
+                            if (err) throw err;
+                            dbo = db.db(config.myDB);
+                            Base.generateCode(entity, name, response);
+                            await dbo.collection(name).insert(entity, function (err, response) {
+                                if (err) throw err;
+                                res.send(201, response);
+                            });
+                        });
+                    });
+                }
             } else if (req.method === 'GET') {
                 if (req.params.id) { // Get By Id
                     let objID = ObjectID(req.params.id);
@@ -39,7 +56,7 @@ function Models() {
             } else if (req.method === 'PUT') {
                 let objID = ObjectID(req.params.id);
                 let entity = req.body;
-                if(entity.is_delete){
+                if (entity.is_delete) {
                     entity.is_delete = 1;
                 }
                 await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity }, function (err, response) {
@@ -57,31 +74,33 @@ function Models() {
         });
     }
 
-    this.lastIndex = function(callback) {
-        let name='m_product';
+    this.lastIndexOfCollection = function (name, callback) {
         MongoClient.connect(config.dbconn, async function (err, db) {
             if (err) throw err;
             dbo = db.db(config.dbname);
-            dbo.collection(name).aggregate(
-                [
-                  { $sort: { _id: 1, code: 1 } },
-                  {
-                    $group:
-                      {
-                        _id: "$id",
-                        code: { $last: "$code" }
-                      }
-                  }
-                ]
-             ).toArray(function (err, response) {
-                if (err) throw err;
-                return  callback(response);
-                db.close();
-            });
+            await dbo.collection(name).find()
+                .limit(1)
+                .sort({ $natural: -1 })
+                .toArray((err, response) => {
+                    return callback(response);
+                });
         });
-
-        
     }
+
+}
+
+function lastIndexOfCollection(name, callback) {
+    MongoClient.connect(config.dbconn, function (err, db) {
+        if (err) throw err;
+        dbo = db.db(config.dbname);
+        dbo.collection(name).find()
+            .limit(1)
+            .sort({ $natural: -1 })
+            .toArray((err, response) => {
+                callback(response);
+            });
+        db.close();
+    });
 }
 
 module.exports = new Models();

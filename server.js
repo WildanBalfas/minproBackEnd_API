@@ -30,6 +30,19 @@ server.use(cors.actual);
 
  require('./components/route/route')(server);
 
+ server.get('/', (req, res, next) => {
+    let date = new Date();
+    var html = "<html><head><title>Some Project</title></head><body><h1>Selamat Datang "+ date+"</h1></body></html>";
+
+    res.writeHead(200, {
+        'Content-Length': Buffer.byteLength(html),
+        'Content-Type' : 'text/html',
+    });
+
+    res.write(html);
+    res.end;
+});
+
 
 
 global.config = require('./components/configurations/config');
