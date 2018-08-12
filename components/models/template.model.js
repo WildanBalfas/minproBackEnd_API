@@ -59,10 +59,21 @@ function Models() {
                 if (entity.is_delete) {
                     entity.is_delete = 1;
                 }
-                await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity }, function (err, response) {
-                    if (err) throw err;
-                    res.send(200, entity);
-                });
+                
+                if (entity.length > 0) { // Udate Dalam Array
+                    for (let index in entity) {
+                        await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity[index] }, function (err, response) {
+                            if (err) throw err;
+                            res.send(200, entity[index]);
+                        });
+                    }
+                } else { // Update Single
+                    await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity }, function (err, response) {
+                        if (err) throw err;
+                        res.send(200, entity);
+                    });
+                }
+
             } else if (req.method === 'DELETE') {
                 let objID = ObjectID(req.params.id);
                 await dbo.collection(name).findOneAndDelete({ '_id': objID }, function (err, response) {

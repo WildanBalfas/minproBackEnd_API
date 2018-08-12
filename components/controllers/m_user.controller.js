@@ -47,4 +47,31 @@ module.exports = exports = function (server) {
                 });
         });
     });
+
+    server.post('/api/login', (req, res, next) => {
+        MongoClient.connect(config.dbconn, async function(err, db) {
+            if(err) throw err;
+            let userName = req.body.username;
+            let password = req.body.password;
+            dbo = db.db(config.myDB);
+            await dbo.collection(name)
+                .findOne(
+                    { 'username' : userName, 'password' : password},
+                        function(err, response){
+                            if(err) throw err;
+                            delete response.password;
+                            delete response.createDate;
+                            delete response.modifyDate;
+                            delete response.is_delete;
+                            delete response.createdBy;
+                            delete response.mCompanyCode;
+                            delete response.createdDate;
+                            delete response.mCompanyName;
+                            delete response.updateDate;
+                            res.send(200, response);
+                            db.close();
+                        }
+                );
+        });
+    });
 }
