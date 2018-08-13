@@ -18,22 +18,37 @@ module.exports=exports= function(server){
             { $lookup: { from: "m_employee", localField: "assign_to", foreignField: "_id", as: "employeeDoc" } },
             { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
             { $lookup: { from: "m_role", localField: "userDoc.m_role_id", foreignField: "_id", as: "roleDoc" } },
-            
             { $unwind: "$employeeDoc" },
             { $unwind: "$userDoc" },
             { $unwind: "$roleDoc" },
+            // { $match: {"roleDoc.name": "Staff Admin" }},
             {
                 $project: {
                     "_id": 1,
                     "code": 1,
                     "event_name":1,
                     "event_place":1,
-                    "request_by": "$employeeDoc.name",
+                    "request_by": 1,
+                    "requestName" : "$employeeDoc.first_name",
                     "request_date": 1,
                     "m_employee_id": "$userDoc.m_employee_id",
-                    "approved_by": "$employeeDoc.name",
+                    "approved_by": "$employeeDoc.first_name",
                     "createDate": 1,
-                    "status":1,
+                    "status": 
+                    	{
+							"$cond": { 
+               				 "if": { $gte: [ "$status", 1 ] }, 
+               				 "then": "Submitted",
+                			 "else": {
+                   				 "$cond": {
+                       				 "if": { $gte: ["$status",2]}, 
+                       				 "then": "In progress", 
+                        			 "else": "Done"
+                    					}
+               						 }
+           					 }
+              		 },
+                    
                     "start_date": 1,
                     "end_date":1,
                     "budget":1,
