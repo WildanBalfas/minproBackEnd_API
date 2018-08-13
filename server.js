@@ -1,5 +1,6 @@
 'use strict';
 const restify = require('restify');
+const bodyParser = require('body-parser');
 
 
 // const jwt = require('jsonwebtoken');
@@ -13,7 +14,7 @@ const server = restify.createServer({
     version: '1.0.0'
 });
 
-server.use(restify.plugins.bodyParser());
+server.use(bodyParser.json());
 
 const cors = corsMiddleWare({
     origins: ['*'],
