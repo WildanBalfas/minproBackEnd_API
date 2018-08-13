@@ -18,10 +18,15 @@ function Models() {
 
             if (req.method === 'POST') {
                 let arrayName = ['t_design_item', 't_design_item_file', 't_promotion_item',
-                    't_promotion_item_file', 't_souvenir_item', 'm_user', 'm_employee', 'm_menu_access']
+                    't_promotion_item_file', 't_souvenir_item', 'm_user', 'm_employee', 'm_menu_access', 'upload']
 
                 let entity = req.body;
                 Base.isDelete(entity, req);
+
+                if(req.files){
+                    Base.uploadFiles(req, res, next, entity);
+                }
+                
                 if (arrayName.includes(name)) { // Table yang tidak memiliki code
                     await dbo.collection(name).insert(entity, function (err, response) {
                         if (err) throw err;
@@ -64,7 +69,7 @@ function Models() {
                     for (let index in entity) {
                         await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity[index] }, function (err, response) {
                             if (err) throw err;
-                            res.send(200, entity[index]);
+                            res.send(200, entity);
                         });
                     }
                 } else { // Update Single

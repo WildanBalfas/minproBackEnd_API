@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectID;
 const TableCode = require('./base.tablecode');
 const MongoClient = require('mongodb').MongoClient;
 let dbo;
+let fs = require('fs-extra'); // for uploads
 function BaseFunction() {
     /**
      * Convert id relasi yang ada di table lain
@@ -113,7 +114,7 @@ function BaseFunction() {
             let panjangCode = code.length; // Panjang Code: TRWOEV11081800001 = 17
             let panjangCodeBelakang = code.slice(-5, panjangCode - panjangHasilJumlah); // 0000
             result = codeDepan + codeTengah + panjangCodeBelakang + jumlahCodeBelakang;
-        }else{
+        } else {
             let slice = code.slice(2); // slice: PR0001 = 0001
             let strLength = code.length; // Panjang Code PR0001 = 6
             let jumlah = parseInt(slice) + 1; // slice + 1 = 0001 + 1 = 2
@@ -148,6 +149,8 @@ function BaseFunction() {
             today = dd + '-' + mm + '-' + yyyy; // 10-12-2018
         } else if (format == 'dd/mm/yyyy') {
             today = dd + '/' + mm + '/' + yyyy; // 10/12/2018
+        }else if (format == 'yy/mm') {
+            today = yyyy + '/' + mm + '/' + dd; // 2018/12/10
         } else if (format == 'dd mm yyyy') {
             today = dd + ' ' + mm + ' ' + yyyy; // 10 12 2018
         } else if (format == 'dd/mm/yy') {
@@ -159,6 +162,29 @@ function BaseFunction() {
         }
 
         return today;
+    }
+
+    this.uploadFiles = function (req, res, next, entity) {
+        let tanggal = this.setTanggal('yy/mm')
+        var crypto = require("crypto");
+        var id = crypto.randomBytes(20).toString('hex');
+        let dataFile = req.files.file;
+        var filePath = dataFile.path;
+        var currentFolder = process.cwd() + '/pub/uploads'  + '/' + tanggal;
+        var fileType = dataFile.type;
+        var fileSize = dataFile.size;
+        var fileName = dataFile.name;
+        var fileExtension = fileName.slice(fileName.indexOf("."));
+        var randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        var filename = randomString + fileExtension;
+        fs.move(filePath, currentFolder + '/' + filename, function (err) {
+            if (err) return err;
+        });
+        entity.filename = fileName;
+        entity.size = fileSize;
+        entity.extention = fileExtension;
+        res.end('upload');
+        next();
     }
 }
 

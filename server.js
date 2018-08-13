@@ -1,7 +1,7 @@
 'use strict';
-
 const restify = require('restify');
-const bodyParser = require('body-parser');
+
+
 // const jwt = require('jsonwebtoken');
 const corsMiddleWare = require('restify-cors-middleware');
 
@@ -28,25 +28,23 @@ server.use(cors.actual);
  * Route in route components
  */
 
- require('./components/route/route')(server);
+require('./components/route/route')(server);
 
- server.get('/', (req, res, next) => {
+server.get('/', (req, res, next) => {
     let date = new Date();
-    var html = "<html><head><title>Some Project</title></head><body><h1>Selamat Datang "+ date+"</h1></body></html>";
+    var html = "<html><head><title>Some Project</title></head><body><h1>Selamat Datang " + date + "</h1></body></html>";
 
     res.writeHead(200, {
         'Content-Length': Buffer.byteLength(html),
-        'Content-Type' : 'text/html',
+        'Content-Type': 'text/html',
     });
 
     res.write(html);
     res.end;
 });
 
-
-
 global.config = require('./components/configurations/config');
 
 server.listen(config.port, function () {
-  console.log('%s listen di %s', server.name, server.url);
+    console.log('%s listen di %s', server.name, server.url);
 });
