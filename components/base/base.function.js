@@ -29,7 +29,8 @@ function BaseFunction() {
             "settlement_by",
             "settlement_approved_by",
             "t_souvenir_id",
-            "m_souvenir_id"
+            "m_souvenir_id",
+            "parent_id"
         ];
         if (entity.length > 0) {
             for (let i = 0; i < entity.length; i++) {
