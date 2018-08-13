@@ -19,23 +19,30 @@ module.exports=exports= function(server){
             { $lookup: { from: "m_menu", localField: "m_menu_id", foreignField: "_id", as: "menu" }}, 
             { $unwind: "$role" },
             { $unwind: "$menu" }, 
-            { $project: {
-                    "_id": 1,
-                    "code": 1,
-                    "is_delete" : 1,
-                    "m_role_id": 1,
-                    "createDate" : 1,
-                    "createBy" : 1,
-                    "role.code": 1,
-                    "role.name": 1,
-                    "role.description": 1,
-                    "m_menu_id" : 1,
-                    "menu.code" : 1,
-                    "menu.name" :1, 
-                    "menu.controller"  : 1
+            {
+                $addFields:{
+                   "menu.m_menu_id":"$m_menu_id"
                 }
-            }
-        ])
+             },
+             {
+                $group:{
+                   _id:"$m_role_id",
+                   code:{
+                      $first:"$role.code"
+                   },
+                   name:{
+                      $first:"$role.name"
+                   },
+                   description:{
+                      $first:"$role.description"
+                   },
+                   menu:{
+                      $push:"$menu"
+                   }
+                }
+             }
+             
+             ])
            .toArray(function (err, response) {
                if (err) throw err;
                res.send(200, response);
