@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = exports = function (server) {
-    require('../controllers/template.controller')(server, 'm_menu');
+    // require('../controllers/template.controller')(server, 'm_menu');
     require('../controllers/template.controller')(server, 'm_role');
     require('../controllers/template.controller')(server, 'm_unit');
     // require('../controllers/template.controller')(server, 'm_menu_access');
@@ -21,7 +21,7 @@ module.exports = exports = function (server) {
 
 
     require('../controllers/t_design.controller')(server);
-
+    require('../controllers/m_menu.controller')(server);
     
     require('../controllers/template.controller')(server, 't_design_item');
     
