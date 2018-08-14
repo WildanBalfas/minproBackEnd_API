@@ -15,45 +15,45 @@ module.exports=exports= function(server){
            dbo = db.db(config.dbname);
            dbo.collection(name)
            .aggregate([
-            { $lookup: { from: "m_employee", localField: "assign_to", foreignField: "_id", as: "employeeDoc" } },
+            { $lookup: { from: "m_employee", localField: "request_by", foreignField: "_id", as: "employeeDoc" } },
             { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
             { $lookup: { from: "m_role", localField: "userDoc.m_role_id", foreignField: "_id", as: "roleDoc" } },
             { $unwind: "$employeeDoc" },
             { $unwind: "$userDoc" },
             { $unwind: "$roleDoc" },
-            // { $match: {"roleDoc.name": "Staff Admin" }},
+            // { $match: {"roleDoc.name": /Staff/ }},
             {
                 $project: {
                     "_id": 1,
-                    "code": 1,
-                    "event_name":1,
-                    "event_place":1,
-                    "request_by": 1,
+                    "code": "$code",
+                    "event_name":"$event_name",
+                    "event_place":"$event_place",
+                    "request_by": "$request_by",
                     "requestName" : "$employeeDoc.first_name",
-                    "request_date": 1,
-                    "m_employee_id": "$userDoc.m_employee_id",
-                    "approved_by": "$employeeDoc.first_name",
-                    "createDate": 1,
+                    "request_date": "$request_date",
+                    // "m_employee_id": "$approved_by",
+                    "approved_by": "$approved_by",
+                    "createDate": "$createDate",
                     "status": 
                     	{
-							"$cond": { 
-               				 "if": { $gte: [ "$status", 1 ] }, 
-               				 "then": "Submitted",
-                			 "else": {
-                   				 "$cond": {
-                       				 "if": { $gte: ["$status",2]}, 
-                       				 "then": "In progress", 
-                        			 "else": "Done"
+							$cond: { 
+               				 if: { $lte: [ "$status", 1 ] }, 
+               				 then: "Submitted",
+                			 else: {
+                   				 $cond: {
+                       				 if: { $lte: ["$status", 2]}, 
+                       				 then: "In progress", 
+                        			 else: "Done"
                     					}
                						 }
            					 }
               		 },
                     
-                    "start_date": 1,
-                    "end_date":1,
-                    "budget":1,
+                    "start_date": "$start_date",
+                    "end_date":"$end_date",
+                    "budget":"$budget",
                     "assign_to": "$employeeDoc.name",
-                    "note":1,
+                    "note":"$note",
                     "roleName":"$roleDoc.name",
                     "roleId": "$roleDoc._id"
                 }
