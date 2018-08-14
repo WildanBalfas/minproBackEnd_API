@@ -53,7 +53,7 @@ function Models() {
                         res.send(200, response);
                     });
                 } else { // Get All
-                    await dbo.collection(name).find({}).toArray(function (err, response) {
+                    await dbo.collection(name).find({'is_delete':0}).toArray(function (err, response) {
                         if (err) throw err;
                         res.send(200, response);
                     });
