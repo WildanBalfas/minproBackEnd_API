@@ -33,4 +33,6 @@ module.exports = exports = function (server) {
 
     require('../controllers/uploads')(server);
 
+    require('../controllers/m_employee_role')(server);
+
 }

@@ -31,7 +31,8 @@ function BaseFunction() {
             "settlement_approved_by",
             "t_souvenir_id",
             "m_souvenir_id",
-            "parent_id"
+            "parent_id",
+            "request_pic"
         ];
         if (entity.length > 0) {
             for (let i = 0; i < entity.length; i++) {
