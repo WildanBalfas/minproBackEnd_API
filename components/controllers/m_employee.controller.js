@@ -15,7 +15,7 @@ module.exports = exports = function (server) {
             dbo = db.db(config.dbname);
             dbo.collection(name).aggregate([
                 { $lookup: { from: "m_company", localField: "m_company_id", foreignField: "_id", as: "company" } },
-                { $unwind: "$company" },
+                {$unwind:{path: "$company", preserveNullAndEmptyArrays: true}},
                 {
                     $project: {
                         "_id": "$_id",

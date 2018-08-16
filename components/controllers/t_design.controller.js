@@ -21,11 +21,11 @@ module.exports = exports = function (server) {
                 { $lookup: { from: 'm_user', localField: 'created_by', foreignField: '_id', as: 'createdByDoc' } },
                 { $lookup: { from: 'm_user', localField: 'updated_by', foreignField: '_id', as: 'updatedByDoc' } },
                 { $unwind: '$requestByDoc' },
-                { $unwind: '$eventDoc' },
-                { $unwind: '$approvedByDoc' },
-                { $unwind: '$assignToDoc' },
-                { $unwind: '$createdByDoc' },
-                { $unwind: '$updatedByDoc' },
+                {$unwind:{path: "$eventDoc", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$approvedByDoc", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$assignToDoc", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$createdByDoc", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$updatedByDoc", preserveNullAndEmptyArrays: true}},
                 {
                     $project: {
                         "_id": 1,
