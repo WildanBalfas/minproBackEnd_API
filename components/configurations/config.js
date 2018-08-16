@@ -6,6 +6,6 @@ module.exports = {
     dbname: 'minprodb'
     // port: 8000,
     // dbconn: 'mongodb://localhost:27017/miniprodb',
-    // dbName: 'minprodb',
+    // dbname: 'minprodb',
     // auth: false,
 }

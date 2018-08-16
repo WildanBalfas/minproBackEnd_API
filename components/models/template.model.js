@@ -8,7 +8,7 @@ function Models() {
     this.model = function (req, res, next, name) {
         MongoClient.connect(config.dbconn, async function (err, db) {
             if (err) throw err;
-            dbo = db.db(config.myDB);
+            dbo = db.db(config.dbname);
 
             if (req.method === 'PUT' || req.method === 'POST') {
                 let entity = req.body;
@@ -36,7 +36,7 @@ function Models() {
                     lastIndexOfCollection(name, function (response) {
                         MongoClient.connect(config.dbconn, async function (err, db) {
                             if (err) throw err;
-                            dbo = db.db(config.myDB);
+                            dbo = db.db(config.dbname);
                             Base.generateCode(entity, name, response);
                             await dbo.collection(name).insert(entity, function (err, response) {
                                 if (err) throw err;
