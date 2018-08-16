@@ -30,6 +30,7 @@ server.use(cors.actual);
  */
 
 require('./components/route/route')(server);
+require('./components/auth/auth')(server);
 
 server.get('/', (req, res, next) => {
     let date = new Date();
