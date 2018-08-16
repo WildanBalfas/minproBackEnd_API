@@ -17,10 +17,8 @@ module.exports = exports = function (server) {
                 .aggregate([
                     { $lookup: { from: "m_employee", localField: "request_by", foreignField: "_id", as: "employeeDoc" } },
                     { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
-                    { $lookup: { from: "m_role", localField: "userDoc.m_role_id", foreignField: "_id", as: "roleDoc" } },
                     { $unwind: "$employeeDoc" },
                     { $unwind: "$userDoc" },
-                    { $unwind: "$roleDoc" },
                     {
                         $project: {
                             "_id": 1,
@@ -28,38 +26,19 @@ module.exports = exports = function (server) {
                             "event_name": "$event_name",
                             "event_place": "$event_place",
                             "request_by": "$request_by",
-                            "requestName": "$employeeDoc.first_name",
+                            "requestName": {
+                                "first":"$employeeDoc.first_name",
+                                "last":"$employeeDoc.last_name"
+                            },
                             "request_date": "$request_date",
                             "approved_by": "$approved_by",
                             "createDate": "$createDate",
                             "status": "$status",
-                                // {
-                                //     $cond: {
-                                //         if: { $eq: ["$status", 1] },
-                                //         then: "Submitted",
-                                //         else: {
-                                //             $cond: {
-                                //                 if: { $eq: ["$status", 2] },
-                                //                 then: "In progress",
-                                //                 else: {
-                                //                     $cond: {
-                                //                         if: { $eq: ["$status", 3] },
-                                //                         then: "Done",
-                                //                         else: ""
-                                //                     }
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // },
-
                             "start_date": "$start_date",
                             "end_date": "$end_date",
                             "budget": "$budget",
                             "assign_to": "$employeeDoc.name",
                             "note": "$note",
-                            "roleName": "$roleDoc.name",
-                            "roleId": "$roleDoc._id"
                         }
                     }
                 ])

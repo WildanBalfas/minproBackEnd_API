@@ -24,7 +24,10 @@ module.exports=exports= function(server){
                 $project: {
                     "_id": 1,
                     "code": "$code",
-                    "name":"$first_name",
+                    "name":{
+                        "first":"$first_name",
+                        "last" :"$last_name"
+                    },
                     "roleName":"$roleDoc.name",
                     "roleId": "$roleDoc._id"
                 }
