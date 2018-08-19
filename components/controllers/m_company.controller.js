@@ -17,11 +17,13 @@ module.exports=exports= function(server){
            .aggregate([
             // { $lookup: { from: "m_employee", localField: "created_by", foreignField: "_id", as: "employeeDoc" } },
             // { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
-            // { $lookup: { from: "m_role", localField: "userDoc.m_role_id", foreignField: "_id", as: "roleDoc" } },
+            { $lookup: { from: "m_role", localField: "created_by", foreignField: "_id", as: "roleDoc1" } },
+            { $lookup: { from: "m_role", localField: "updated_by", foreignField: "_id", as: "roleDoc2" } },
             { $match: {"is_delete": 0}},
             // { $unwind: "$employeeDoc"},
             // { $unwind: "$userDoc" },
-            // { $unwind: "$roleDoc" },
+            { $unwind: {path: "$roleDoc2", preserveNullAndEmptyArrays: true}},
+            { $unwind: "$roleDoc1" },
             { $project: { 
                     "code": "$code", 
                     "name": "$name", 
@@ -29,8 +31,10 @@ module.exports=exports= function(server){
                     "email": "$email",
                     "phone": "$phone",
                     "createDate" : "$createDate",
-                    "is_delete" : "$is_delete",
-                    // "created_by" : "$roleDoc.name"			
+                    "created_by" : "$roleDoc1.name",
+                    "updateDate": "$roleDoc2.name",
+                    "createDate": "$createDate",
+                    "is_delete" : "$is_delete",		
             }
             }
         ])
