@@ -15,20 +15,22 @@ module.exports = exports = function (server) {
             dbo = db.db(config.dbname);
             dbo.collection(name)
                 .aggregate([
-                    { $lookup: { from: "m_employee", localField: "request_by", foreignField: "_id", as: "employeeDoc" } },
+                    { $lookup: { from: "m_employee", localField: "request_by", foreignField: "_id", as: "employeeDoc1" } },
                     { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
-                    { $unwind: "$employeeDoc" },
+                    { $lookup: { from: "m_employee", localField: "assign_to", foreignField: "_id", as: "employeeDoc2" } },
+                    { $unwind: {path: "$employeeDoc2", preserveNullAndEmptyArrays: true}},
+                    { $unwind: "$employeeDoc1" },
                     { $unwind: "$userDoc" },
                     {
                         $project: {
                             "_id": 1,
                             "code": "$code",
                             "event_name": "$event_name",
-                            "event_place": "$event_place",
+                            "place": "$place",
                             "request_by": "$request_by",
                             "requestName": {
-                                "first":"$employeeDoc.first_name",
-                                "last":"$employeeDoc.last_name"
+                                "first":"$employeeDoc1.first_name",
+                                "last":"$employeeDoc1.last_name"
                             },
                             "request_date": "$request_date",
                             "approved_by": "$approved_by",
@@ -37,7 +39,10 @@ module.exports = exports = function (server) {
                             "start_date": "$start_date",
                             "end_date": "$end_date",
                             "budget": "$budget",
-                            "assign_to": "$employeeDoc.name",
+                            "assign_to": {
+                                "first" : "$employeeDoc2.first_name",
+                                "last" : "$employeeDoc2.last_name"
+                            },
                             "note": "$note",
                         }
                     }
