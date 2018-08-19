@@ -22,7 +22,7 @@ module.exports = exports = function (server) {
 
     require('../controllers/t_design.controller')(server);
     require('../controllers/m_menu.controller')(server);
-    
+    require('../controllers/t_promotion.controller')(server);
     require('../controllers/template.controller')(server, 't_design_item');
     
     require('../controllers/template.controller')(server, 't_design_item_file');
