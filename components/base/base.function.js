@@ -45,7 +45,6 @@ function BaseFunction() {
                     }
                 }
             }
-            console.log(entity);
         } else {
             for (let key in entity) {
                 let check = objEntity.includes(key);
