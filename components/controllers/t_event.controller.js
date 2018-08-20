@@ -16,11 +16,11 @@ module.exports = exports = function (server) {
             dbo.collection(name)
                 .aggregate([
                     { $lookup: { from: "m_employee", localField: "request_by", foreignField: "_id", as: "employeeDoc1" } },
-                    { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
+                    // { $lookup: { from: "m_user", localField: "employeeDoc._id", foreignField: "m_employee_id", as: "userDoc" } },
                     { $lookup: { from: "m_employee", localField: "assign_to", foreignField: "_id", as: "employeeDoc2" } },
                     { $unwind: {path: "$employeeDoc2", preserveNullAndEmptyArrays: true}},
                     { $unwind: "$employeeDoc1" },
-                    { $unwind: "$userDoc" },
+                    // { $unwind: "$userDoc" },
                     {
                         $project: {
                             "_id": 1,
@@ -39,10 +39,11 @@ module.exports = exports = function (server) {
                             "start_date": "$start_date",
                             "end_date": "$end_date",
                             "budget": "$budget",
-                            "assign_to": {
+                            "assign_toName": {
                                 "first" : "$employeeDoc2.first_name",
                                 "last" : "$employeeDoc2.last_name"
                             },
+                            "assign_to": "$assign_to",
                             "note": "$note",
                         }
                     }

@@ -23,13 +23,14 @@ module.exports=exports= function(server){
             {
                 $project: {
                     "_id": 1,
-                    "code": "$code",
+                    "code": 1,
                     "name":{
                         "first":"$first_name",
                         "last" :"$last_name"
                     },
                     "roleName":"$roleDoc.name",
-                    "roleId": "$roleDoc._id"
+                    "roleId": "$roleDoc._id",
+                    "userId": "$userDoc._id"
                 }
             }
         ])
