@@ -18,9 +18,11 @@ module.exports = exports = function (server) {
                 { $lookup: { from: "m_role", localField: "m_role_id", foreignField: "_id", as: "role" } },
                 { $lookup: { from: "m_employee", localField: "m_employee_id", foreignField: "_id", as: "employee" } },
                 { $lookup: { from: "m_company", localField: "employee.m_company_id", foreignField: "_id", as: "company" } },
+                { $lookup: { from: "m_role", localField: "m_role_id", foreignField: "_id", as: "createdByRole"}},
                 { $unwind: { path: "$role", preserveNullAndEmptyArrays: true } },
                 { $unwind: { path: "$employee", preserveNullAndEmptyArrays: true } },
                 { $unwind: { path: "$company", preserveNullAndEmptyArrays: true } },
+                { $unwind: { path: "$createdByRole", preserveNullAndEmptyArrays: true } },
                 { $match: { is_delete: 0 } },
                 {
                     $project: {
@@ -30,7 +32,7 @@ module.exports = exports = function (server) {
                         "m_role_id": 1,
                         "m_employee_id": 1,
                         "createDate": 1,
-                        "createBy": 1,
+                        "created_by": 1,
                         "mRoleCode": "$role.code",
                         "mRoleName": "$role.name",
                         "mRoleDescription": "$role.description",
@@ -39,6 +41,7 @@ module.exports = exports = function (server) {
                         "mEmployeeEmail": "$employee.email",
                         "mEmployeemCompanyId": "$employee.m_company_id",
                         "mEmployeemCompanyName": "$company.name",
+                        "createdByRoleName": "$createdByRole.name"
                     }
                 }
             ])

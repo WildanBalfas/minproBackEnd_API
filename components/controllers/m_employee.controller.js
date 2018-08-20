@@ -15,7 +15,11 @@ module.exports = exports = function (server) {
             dbo = db.db(config.dbname);
             dbo.collection(name).aggregate([
                 { $lookup: { from: "m_company", localField: "m_company_id", foreignField: "_id", as: "company" } },
+                { $lookup: { from: "m_user", localField: "created_by", foreignField:"_id", as: "user"}},
+                { $lookup: { from: "m_role", localField: "user.m_role_id", foreignField: "_id", as: "role"}},
                 {$unwind:{path: "$company", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$user", preserveNullAndEmptyArrays: true}},
+                {$unwind:{path: "$role", preserveNullAndEmptyArrays: true}},
                 { $match : { is_delete : 0 } },
                 {
                     $project: {
@@ -30,6 +34,7 @@ module.exports = exports = function (server) {
                         "mCompanyName": "$company.name",
                         "updateDate": "$updateDate",
                         "updatedBy": "$updated_by",
+                        "mRoleName": "$role.name",
                     }
                 }
             ])
