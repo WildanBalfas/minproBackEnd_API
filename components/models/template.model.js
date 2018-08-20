@@ -22,11 +22,15 @@ function Models() {
 
                 let entity = req.body;
                 Base.isDelete(entity, req);
-
-                if(req.files){
+                if (name == 't_design') {
+                    var now = new Date()
+                    var date = now.toLocaleDateString();
+                    entity.request_date = date;
+                }
+                if (req.files) {
                     Base.uploadFiles(req, res, next, entity);
                 }
-                
+
                 if (arrayName.includes(name)) { // Table yang tidak memiliki code
                     await dbo.collection(name).insert(entity, function (err, response) {
                         if (err) throw err;
@@ -64,7 +68,7 @@ function Models() {
                 if (entity.is_delete) {
                     entity.is_delete = 1;
                 }
-                
+
                 if (entity.length > 0) { // Udate Dalam Array
                     for (let index in entity) {
                         await dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: entity[index] }, function (err, response) {
