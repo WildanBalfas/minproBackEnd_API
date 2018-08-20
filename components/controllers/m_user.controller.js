@@ -20,6 +20,7 @@ module.exports = exports = function (server) {
                 {$unwind:{path: "$role", preserveNullAndEmptyArrays: true}},
                 {$unwind:{path: "$employee", preserveNullAndEmptyArrays: true}},
                 {$unwind:{path: "$company", preserveNullAndEmptyArrays: true}},
+                { $match : { is_delete : 0 } },
                 {
                     $project: {
                         "_id": 1,

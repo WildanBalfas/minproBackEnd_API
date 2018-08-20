@@ -57,8 +57,6 @@ module.exports = exports = function (server) {
                 Base.generateCode(t_souvenir, name, response);
                 dbo.collection(name).insert(t_souvenir, function (err, response) {
                     if (err) throw err;
-                    // res.send(201, response);
-                    console.log(response);
                     let arr = [];
                     for (let key in t_souvenir_item) {
                         Base.convertToObjectId(t_souvenir_item[key]);
@@ -75,56 +73,13 @@ module.exports = exports = function (server) {
 
 
                         }
-
-
                         arr.push(item);
                     }
                     dbo.collection('t_souvenir_item').insert(arr, function (err, response) {
                         if (err) throw err;
                         res.send(201, response);
-                        console.log(response);
                     });
-                    
-
-
                 });
-
-
-
-
-
-
-                // let arr = [];
-                // for (let key in t_souvenir_item) {
-
-                //     let item =
-                //     {
-
-                //         m_souvenir_id:t_souvenir_item[key].m_souvenir_id,
-                //         qty:t_souvenir_item[key].qty,
-                //         notes: t_souvenir_item[key].notes,
-                //         createDate:t_souvenir_item[key].createDate,
-                //         updateDate:t_souvenir_item[key].updateDate
-
-
-                //     }
-                // Base.convertToObjectId(t_souvenir_item[key]);
-                // Base.setTimeStamp(t_souvenir_item[key], req);
-
-                //     arr.push(item);
-                // }
-
-
-                // ConvertToObjectId(entity);
-                // TimeStamp(entity, req);
-
-
-                // dbo = db.db(config.dbname);
-                // dbo.collection(name).insert(entity, function (err, response) {
-                //     if (err) throw err;
-                //     res.send(201, response);
-                //     db.close();
-                // });
             });
         });
     });

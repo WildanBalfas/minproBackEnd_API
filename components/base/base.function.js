@@ -32,9 +32,9 @@ function BaseFunction() {
             "t_souvenir_id",
             "m_souvenir_id",
             "parent_id",
-            "request_pic"
+            // "request_pic"
         ];
-        if (entity.length > 0) {
+        if (Array.isArray(entity)) {
             for (let i = 0; i < entity.length; i++) {
                 let dataEntity = entity[i];
                 for (let key in dataEntity) {
@@ -45,7 +45,7 @@ function BaseFunction() {
                     }
                 }
             }
-
+            console.log(entity);
         } else {
             for (let key in entity) {
                 let check = objEntity.includes(key);
@@ -151,7 +151,7 @@ function BaseFunction() {
             today = dd + '-' + mm + '-' + yyyy; // 10-12-2018
         } else if (format == 'dd/mm/yyyy') {
             today = dd + '/' + mm + '/' + yyyy; // 10/12/2018
-        }else if (format == 'yy/mm') {
+        } else if (format == 'yy/mm') {
             today = yyyy + '/' + mm + '/' + dd; // 2018/12/10
         } else if (format == 'dd mm yyyy') {
             today = dd + ' ' + mm + ' ' + yyyy; // 10 12 2018
@@ -172,7 +172,7 @@ function BaseFunction() {
         var id = crypto.randomBytes(20).toString('hex');
         let dataFile = req.files.file;
         var filePath = dataFile.path;
-        var currentFolder = process.cwd() + '/pub/uploads'  + '/' + tanggal;
+        var currentFolder = process.cwd() + '/pub/uploads' + '/' + tanggal;
         var fileType = dataFile.type;
         var fileSize = dataFile.size;
         var fileName = dataFile.name;
@@ -188,6 +188,34 @@ function BaseFunction() {
         res.end('upload');
         next();
     }
+
+    /**
+     * Ubah status 0 = rejected; 1: Submited; 2: On Progress; 3: Done
+     * @param {*} response 
+     */
+    this.changeStatus = function (response) {
+        let setArray = [];
+
+        // Jika bukan array ("select by id"), maka di set ke array terlebih dahulu
+        if(!Array.isArray(response)){
+            setArray.push(response);
+            response = setArray;
+        }
+        for (let key in response) {
+            let status = response[key].status;
+            if (status == 0) {
+                response[key].status = 'Rejected';
+            } else if (status == 1) {
+                response[key].status = 'Submited';
+            } else if (status == 2) {
+                response[key].status = 'In Progress';
+            } else if (status == 3) {
+                response[key].status = 'Done';
+            }
+        }
+    }
 }
 
 module.exports = new BaseFunction();
+
+
