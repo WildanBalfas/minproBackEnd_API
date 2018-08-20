@@ -19,6 +19,7 @@ module.exports=exports= function(server){
             { $lookup: { from: "m_menu", localField: "m_menu_id", foreignField: "_id", as: "menu" }}, 
             { $unwind: "$role" },
             { $unwind: "$menu" }, 
+            
             {
                 $addFields:{
                    "menu.m_menu_id":"$m_menu_id"
@@ -35,7 +36,11 @@ module.exports=exports= function(server){
                    },
                    description:{
                       $first:"$role.description"
-                   },
+                   },     
+                   createDate:{
+                    $first:"$createDate"
+                 },          
+                   
                    menu:{
                       $push:"$menu"
                    }

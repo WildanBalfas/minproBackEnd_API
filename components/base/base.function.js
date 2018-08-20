@@ -66,8 +66,15 @@ function BaseFunction() {
         var now = new Date()
         var date = now.toLocaleDateString();
         if (req.method === 'POST') {
-            entity.createDate = date;
-            entity.updateDate = date;
+            if (Array.isArray(entity)) {
+                for(let key in entity){
+                    entity[key].createDate = date;
+                    entity[key].updateDate = date;
+                }
+            } else {
+                entity.createDate = date;
+                entity.updateDate = date;
+            }
         } else if (req.method === 'PUT') {
             entity.updateDate = date;
         }
@@ -197,7 +204,7 @@ function BaseFunction() {
         let setArray = [];
 
         // Jika bukan array ("select by id"), maka di set ke array terlebih dahulu
-        if(!Array.isArray(response)){
+        if (!Array.isArray(response)) {
             setArray.push(response);
             response = setArray;
         }
