@@ -45,6 +45,7 @@ module.exports = exports = function (server) {
                             },
                             "assign_to": "$assign_to",
                             "note": "$note",
+                            "reject_reason" : "$reject_reason"
                         }
                     }
                 ])
