@@ -19,6 +19,10 @@ module.exports = exports = function (server) {
             dbo.collection(name)
                 .aggregate([
                     { $lookup: { from: "m_employee", localField: "received_by", foreignField: "_id", as: "employee" } },
+                    { $lookup: { from: "m_role", localField: "created_by", foreignField: "_id", as: "roleDoc1" } },
+                    { $lookup: { from: "m_role", localField: "updated_by", foreignField: "_id", as: "roleDoc2" } },
+                    { $unwind: { path: "$roleDoc2", preserveNullAndEmptyArrays: true } },
+                    { $unwind: "$roleDoc1" },
                     { $unwind: "$employee" },
                     { $match: { type: "addtional" } },
                     {
@@ -30,7 +34,8 @@ module.exports = exports = function (server) {
                             "received_by": 1,
                             "received_date": 1,
                             "createDate": 1,
-                            "createBy": 1,
+                            "created_by" : "$roleDoc1.name",
+                            "update_by": "$roleDoc2.name",
                             "EmployeeFirstName": "$employee.first_name",
                             "EmployeeLastName": "$employee.last_name",
 
@@ -107,7 +112,7 @@ module.exports = exports = function (server) {
                         }
                         arr.push(item);
                     }
-                    dbo.collection('t_souvenir_item').insert(arr, function (err, response) {
+                    dbo.collection('t_souvenir_item').insert(arr, function (err, document) {
                         if (err) throw err;
                         res.send(201, response);
                     });
@@ -117,38 +122,38 @@ module.exports = exports = function (server) {
     });
 
     server.put('/api/update_souvenir_stock/:id', (req, res, next) => {
-        
-            let objID = ObjectID(req.params.id);
-            let entity = req.body;
-            let t_souvenir = entity[0];
-            let t_souvenir_item = entity[1];
-            // console.log(t_souvenir_item)
-            MongoClient.connect(config.dbconn, function (err, db) {
-                if (err) throw err;
-                dbo = db.db(config.dbname);
-                Base.convertToObjectId(t_souvenir);
-                Base.setTimeStamp(t_souvenir, req);
-                dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: t_souvenir }, function (err, response) {
-                   
-                    // res.send(200, entity);
-               
+
+        let objID = ObjectID(req.params.id);
+        let entity = req.body;
+        let t_souvenir = entity[0];
+        let t_souvenir_item = entity[1];
+        // console.log(t_souvenir_item)
+        MongoClient.connect(config.dbconn, function (err, db) {
+            if (err) throw err;
+            dbo = db.db(config.dbname);
+            Base.convertToObjectId(t_souvenir);
+            Base.setTimeStamp(t_souvenir, req);
+            dbo.collection(name).findOneAndUpdate({ '_id': objID }, { $set: t_souvenir }, function (err, response) {
+
+                // res.send(200, entity);
+
                 console.log(response.value._id)
                 for (let key in t_souvenir_item) {
                     Base.convertToObjectId(t_souvenir_item[key]);
                     dbo.collection('t_souvenir_item').findOne({ '_id': ObjectID(t_souvenir_item[key]._id) }, function (err, document) {
                         if (document) {
-                            let id = ObjectID(t_souvenir_item[key]._id) ;
+                            let id = ObjectID(t_souvenir_item[key]._id);
                             let entity = t_souvenir_item[key];
                             console.log(t_souvenir)
-                            
+
                             console.log(entity)
-                            
-                            dbo.collection('t_souvenir_item').findOneAndUpdate({ '_id': id }, { $set:entity}, function (err, respon) {
-                            //     if (err) throw err;
+
+                            dbo.collection('t_souvenir_item').findOneAndUpdate({ '_id': id }, { $set: entity }, function (err, respon) {
+                                //     if (err) throw err;
                                 // res.send(200, entity);
                                 console.log(respon)
                             });
-                            
+
                         } else {
                             // Base.convertToObjectId(t_souvenir_item[key]);
                             // Base.setTimeStamp(t_souvenir_item[key], req);
@@ -161,8 +166,8 @@ module.exports = exports = function (server) {
                             //     notes: t_souvenir_item[key].notes,
                             //     createDate: t_souvenir_item[key].createDate,
                             //     updateDate: t_souvenir_item[key].updateDate
-    
-    
+
+
                             // }
                             // arr.push(item);
                             console.log('tidak')
@@ -202,5 +207,5 @@ module.exports = exports = function (server) {
             });
         });
     });
-    
+
 }
