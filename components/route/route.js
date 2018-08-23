@@ -2,7 +2,7 @@
 
 module.exports = exports = function (server) {
     // require('../controllers/template.controller')(server, 'm_menu');
-    require('../controllers/template.controller')(server, 'm_role');
+    // require('../controllers/template.controller')(server, 'm_role');
     // require('../controllers/template.controller')(server, 'm_unit');
     // require('../controllers/template.controller')(server, 'm_menu_access');
     // require('../controllers/template.controller')(server, 'm_company');
@@ -34,7 +34,7 @@ module.exports = exports = function (server) {
     require('../controllers/uploads')(server);
 
     require('../controllers/m_employee_role')(server);
-
+    require('../controllers/m_role.controller')(server);
     require('../controllers/m_company.controller')(server);
     require('../controllers/m_unit.controller')(server);
     require('../controllers/m_product.controller')(server);
