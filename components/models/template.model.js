@@ -36,7 +36,8 @@ function Models() {
                         if (err) throw err;
                         res.send(201, response);
                     });
-                } else { // table yang memiliki code
+                } 
+                else { // table yang memiliki code
                     lastIndexOfCollection(name, function (response) {
                         MongoClient.connect(config.dbconn, async function (err, db) {
                             if (err) throw err;
@@ -45,6 +46,7 @@ function Models() {
                             await dbo.collection(name).insert(entity, function (err, response) {
                                 if (err) throw err;
                                 res.send(201, response);
+                                console.log(response);
                             });
                         });
                     });

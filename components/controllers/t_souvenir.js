@@ -129,6 +129,7 @@ module.exports = exports = function (server) {
         // console.log(ent)
         let t_souvenir = ent[0];
         let t_souvenir_item = ent[1];
+        let arr2 = [];
         console.log(t_souvenir_item)
         MongoClient.connect(config.dbconn, function (err, db) {
             if (err) throw err;
@@ -143,7 +144,7 @@ module.exports = exports = function (server) {
                     dbo.collection('t_souvenir_item').findOne({ '_id': ObjectID(t_souvenir_item[key]._id) }, function (err, document) {
                         let id = ObjectID(t_souvenir_item[key]._id);
                         let entity = t_souvenir_item[key];
-                        console.log(entity)
+                        // console.log(entity)
                         if (document) {
 
                             let item = {
@@ -161,21 +162,28 @@ module.exports = exports = function (server) {
                         } else {
                            
                             
-                            // let arr = [];
-                            // let item =
-                            // {
-                            //     t_souvenir_id: response.ops[0]._id,
-                            //     m_souvenir_id: t_souvenir_item[key].m_souvenir_id,
-                            //     qty: parseInt(t_souvenir_item[key].qty),
-                            //     notes: t_souvenir_item[key].notes,
-                            //     createDate: t_souvenir_item[key].createDate,
-                            //     updateDate: t_souvenir_item[key].updateDate
+                            
+                            let item =
+                            {
+                                t_souvenir_id: response.value._id,
+                                m_souvenir_id: entity.m_souvenir_id,
+                                qty: parseInt(entity.qty),
+                                notes: entity.notes,
 
 
-                            // }
-                            // arr.push(item);
-                            console.log('tidak')
+                            }
+                            arr2.push(item);
+
+
+
+                            console.log(response.value._id)
+                            console.log(entity)
+                            dbo.collection('t_souvenir_item').insert(arr2, function (err, doc) {
+                                if (err) throw err;
+                                // res.send(201, response);
+                            });
                         }
+                      
                         
                     });
 
